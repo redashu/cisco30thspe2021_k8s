@@ -199,3 +199,40 @@ ashuc1
 ashuc1
 
 ```
+
+
+### Remote Docker engine 
+
+<img src="rmde.png">
+
+
+## Docker ce intallation on linux 
+
+[check](https://docs.docker.com/engine/install/centos/)
+
+### install and start 
+
+```
+[root@ip-172-31-29-98 ~]# yum  install  docker  -y 
+Failed to set locale, defaulting to C
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+amzn2-core                                                                                           | 3.7 kB  00:00:00     
+
+[root@ip-172-31-29-98 ~]# systemctl start  docker  
+[root@ip-172-31-29-98 ~]# systemctl status  docker  
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
+   Active: active (running) since Mon 2021-08-30 03:52:14 UTC; 3h 37min ago
+     Docs: https://docs.docker.com
+  Process: 2850 ExecStartPre=/usr/libexec/docker/docker-setup-runtimes.sh (code=exited, status=0/SUCCESS)
+  Process: 2839 ExecStartPre=/bin/mkdir -p /run/docker (code=exited, status=0/SUCCESS)
+ Main PID: 2857 (dockerd)
+    Tasks: 8
+   Memory: 38.1M
+   CGroup: /system.slice/docker.service
+           └─2857 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --default-ulimit nofile=32768:65...
+
+
+```
+
+
