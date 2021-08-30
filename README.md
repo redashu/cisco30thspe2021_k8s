@@ -19,4 +19,12 @@
 
 <img src="cont.png">
 
+## hypervisor vs CRE 
+
+<img src="cre.png">
+
+## Info about Docker 
+
+<img src="docker.png">
+
 
