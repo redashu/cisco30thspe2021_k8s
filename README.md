@@ -235,4 +235,158 @@ amzn2-core                                                                      
 
 ```
 
+### app containerization 
+
+<img src="appcont.png">
+
+
+### Intro to Dockerfile 
+
+<img src="tools.png">
+
+### building python based docker  image
+
+```
+ashu@ip-172-31-29-98 pythonapp]$ docker  build  -t   ashupython:ciscov1  . 
+Sending build context to Docker daemon  3.072kB
+Step 1/6 : FROM  python
+latest: Pulling from library/python
+4c25b3090c26: Pull complete 
+1acf565088aa: Pull complete 
+b95c0dd0dc0d: Pull complete 
+5cf06daf6561: Pull complete 
+942374d5c114: Pull complete 
+64c0f10e4cfa: Pull complete 
+76571888410b: Pull complete 
+5e88ca15437b: Pull complete 
+0ab5ec771994: Pull complete 
+Digest: sha256:2bd64896cf4ff75bf91a513358457ed09d890715d9aa6bb602323aedbee84d14
+Status: Downloaded newer image for python:latest
+ ---> 1e76b28bfd4e
+Step 2/6 : LABEL name=ashutoshh
+ ---> Running in 6dad33be2d71
+Removing intermediate container 6dad33be2d71
+ ---> 599816948779
+Step 3/6 : LABEL email=ashutoshh@linux.com
+ ---> Running in dc163385e1d8
+Removing intermediate container dc163385e1d8
+ ---> 61893a05f555
+Step 4/6 : RUN  mkdir /mycode
+ ---> Running in a94da7cbfe21
+Removing intermediate container a94da7cbfe21
+ ---> 9588577ccf60
+Step 5/6 : COPY cisco.py  /mycode/cisco.py
+ ---> 1b4de2f76e14
+Step 6/6 : CMD  ["python","/mycode/cisco.py"]
+ ---> Running in 1818bd10c93f
+Removing intermediate container 1818bd10c93f
+ ---> 4b11844b90da
+Successfully built 4b11844b90da
+Successfully tagged ashupython:ciscov1
+
+
+```
+
+### creating container 
+
+```
+[ashu@ip-172-31-29-98 pythonapp]$ docker  run -it -d  --name ashupyc1   ashupython:ciscov1   
+3423a8aed0e2dd87db00339cdaa87a9040bf1f169b4b925f92af012892aad5dc
+[ashu@ip-172-31-29-98 pythonapp]$ docker  ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS     NAMES
+6d1fbff00f2c   rubipython:ciscov1   "python /mycode/cisc…"   13 seconds ago   Up 11 seconds             rubic1
+3423a8aed0e2   ashupython:ciscov1   "python /mycode/cisc…"   14 seconds ago   Up 12 seconds             ashupyc1
+0a3db60637e4   shipython:ciscov1    "python /mycode/cisc…"   25 seconds ago   Up 24 seconds             shipyc1
+
+
+```
+
+### checking resource consumption 
+
+```
+docker  stats   ashupyc1
+
+--- docker  stats 
+CONTAINER ID   NAME            CPU %     MEM USAGE / LIMIT    MEM %     NET I/O      BLOCK I/O     PIDS
+758521b4b2da   sk1             0.00%     4.816MiB / 7.69GiB   0.06%     850B / 0B    0B / 18.4kB   1
+8bbc8d3e3aa8   sanjeevc1       0.00%     4.801MiB / 7.69GiB   0.06%     850B / 0B    0B / 17.4kB   1
+28f99c6e37f4   alwthomap1      0.00%     4.82MiB / 7.69GiB    0.06%     920B / 0B    0B / 12.8kB   1
+fd2baa349775   krishc1         0.00%     4.84MiB / 7.69GiB    0.06%     850B / 0B    0B / 17.4kB   1
+9f1f6f9b8b9d   tejaswinipyc1   0.01%     4.789MiB / 7.69GiB   0.06%     920B / 0B    0B / 17.9kB   1
+ec5d2c18bab8   debasish        0.00%     4.852MiB / 7.69GiB   0.06%     920B / 0B    0B / 17.4kB   1
+6d1fbff00f2c   rubic1          0.00%   
+
+```
+
+### building same python code in differt way
+
+
+```
+[ashu@ip-172-31-29-98 pythonapp]$ ls
+alpine.dockerfile  cisco.py  Dockerfile
+[ashu@ip-172-31-29-98 pythonapp]$ docker  build -t  ashupython:alpinev1  -f  alpine.dockerfile  .  
+Sending build context to Docker daemon   5.12kB
+Step 1/7 : FROM  alpine
+ ---> 14119a10abf4
+Step 2/7 : LABEL name=ashutoshh
+ ---> Running in 8fc6020ff35c
+Removing intermediate container 8fc6020ff35c
+ ---> ef2de2b9fb42
+Step 3/7 : LABEL email=ashutoshh@linux.com
+ ---> Running in f329357c5ed5
+Removing intermediate container f329357c5ed5
+ ---> 9e1ed913a0dc
+Step 4/7 : RUN apk add python3
+ ---> Running in e0b767216532
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.14/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.14/community/x86_64/APKINDEX.tar.gz
+(1/13) Installing libbz2 (1.0.8-r1)
+(2/13) Installing expat (2.4.1-r0)
+(3/13) Installing libffi (3.3-r2)
+(4/13) Installing gdbm (1.19-r0)
+(5/13) Installing xz-libs (5.2.5-r0)
+(6/13) Installing libgcc (10.3.1_git20210424-r2)
+(7/13) Installing libstdc++ (10.3.1_git20210424-r2)
+(8/13) Installing mpdecimal (2.5.1-r1)
+(9/13) Installing ncurses-terminfo-base (6.2_p20210612-r0)
+(10/13) Installing ncurses-libs (6.2_p20210612-r0)
+(11/13) Installing readline (8.1.0-r0)
+(12/13) Installing sqlite-libs (3.35.5-r0)
+(13/13) Installing python3 (3.9.5-r1)
+Executing busybox-1.33.1-r3.trigger
+OK: 56 MiB in 27 packages
+Removing intermediate container e0b767216532
+ ---> a29ef98122d4
+Step 5/7 : RUN  mkdir /mycode
+ ---> Running in d464cadc94cd
+Removing intermediate container d464cadc94cd
+ ---> 3259d472e8cb
+Step 6/7 : COPY cisco.py  /mycode/cisco.py
+ ---> 2d77d6408925
+Step 7/7 : CMD  ["python3","/mycode/cisco.py"]
+ ---> Running in 70442bc05314
+Removing intermediate container 70442bc05314
+ ---> b8d68074f280
+Successfully built b8d68074f280
+
+```
+
+### kill all the running container 
+```
+[ashu@ip-172-31-29-98 pythonapp]$ docker kill  $(docker  ps  -q) 
+2916ecda3684
+758521b4b2da
+28f99c6e37f4
+fd2baa349775
+9f1f6f9b8b9d
+ec5d2c18bab8
+6d1fbff00f2c
+3423a8aed0e2
+
+
+```
+
+### image build 
+
+<img src="imgpp.png">
 
