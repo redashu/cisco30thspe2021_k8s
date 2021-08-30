@@ -1,1 +1,4 @@
-# cisco30thspe2021_k8s
+# training plan 
+
+<img src="plan.png">
+
