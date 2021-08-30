@@ -390,3 +390,90 @@ ec5d2c18bab8
 
 <img src="imgpp.png">
 
+### docker image sharing 
+
+<img src="share.png">
+
+###  registry options 
+
+<img src="reg.png">
+
+### docker image name reality 
+
+<img src="imgname.png">
+
+### kill and remove all container 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  kill $(docker  ps  -q)
+199cb50f896c
+9a4a1b4d1ab5
+cd7bdecb42c6
+a2183ba8db15
+a1669e58d6e9
+2f7b293e4de7
+2ad27fd4e467
+2916ecda3684
+[ashu@ip-172-31-29-98 myimages]$ docker  rm   $(docker  ps  -qa)
+199cb50f896c
+9a4a1b4d1ab5
+```
+
+### remove docker  image
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  rmi alpine 
+Untagged: alpine:latest
+Untagged: alpine@sha256:e1c082e3d3c45cccac829840a25941e679c25d438cc8412c2fa221cf1a824e6a
+
+```
+
+### pushing image to docker  hub 
+
+```
+docker  tag  b8d68074f280    dockerashu/ciscopython:31staug2021v1
+
+```
+
+#### tag image
+
+
+### login to docker hub 
+
+```
+ashu@ip-172-31-29-98 myimages]$ docker  login -u dockerashu 
+Password: 
+WARNING! Your password will be stored unencrypted in /home/ashu/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
+```
+
+### push 
+
+```
+ashu@ip-172-31-29-98 myimages]$ docker  push  dockerashu/ciscopython:31staug2021v1 
+The push refers to repository [docker.io/dockerashu/ciscopython]
+4d3a631eb5cb: Pushed 
+7caa9b101dcd: Pushed 
+64e145a4fce8: Pushed 
+e2eb06d8af82: Mounted from library/alpine 
+31staug2021v1: digest: sha256:68720f66e18c1e5d180692e3f31539eae5951af539298dfdda3a0a4c98a99f6b size: 1154
+
+```
+
+### logout 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  logout 
+Removing login credentials for https://index.docker.io/v1/
+[ashu@ip-172-31-29-98 myimages]$ 
+
+```
+
+
+
+
+
