@@ -48,6 +48,89 @@ Dependencies resolved.
 
 ```
 
+## sample webapplication front end only 
+
+### Understanding web server 
+
+<img src="webs.png">
+
+### httpd web server info before containerizing it 
+
+<img src="cont.png">
+
+### cloning the code 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ git clone  https://github.com/mdn/beginner-html-site-styled
+Cloning into 'beginner-html-site-styled'...
+remote: Enumerating objects: 40, done.
+remote: Total 40 (delta 0), reused 0 (delta 0), pack-reused 40
+Receiving objects: 100% (40/40), 124.07 KiB | 20.68 MiB/s, done.
+Resolving deltas: 100% (10/10), done.
+[ashu@ip-172-31-29-98 myimages]$ ls
+beginner-html-site-styled  flaskwebappnew  pythonapp
+[ashu@ip-172-31-29-98 myimages]$ mv  beginner-html-site-styled  samplewebapp
+[ashu@ip-172-31-29-98 myimages]$ ls
+flaskwebappnew  pythonapp  samplewebapp
+
+```
+
+### building image
+
+```
+[ashu@ip-172-31-29-98 samplewebapp]$ docker  build  -t  dockerashu/ciscohttpd:v1 -f httpd.dockerfile   .  
+Sending build context to Docker daemon     64kB
+Step 1/4 : FROM centos
+ ---> 300e315adb2f
+Step 2/4 : RUN yum install httpd -y
+ ---> Running in ab9d6e1ca1ad
+CentOS Linux 8 - AppStream                       24 MB/s | 8.8 MB     00:00    
+CentOS Linux 8 - BaseOS                          21 MB/s | 5.6 MB     00:00    
+CentOS Linux 8 - Extras                          53 kB/s |  10 kB     00:00    
+Last metadata expiration check: 0:00:01 ago on Tue Aug 31 06:19:27 2021.
+Dependencies resolved.
+======================
+
+```
+
+### creating container 
+
+```
+docker  run -itd --name ashuweb -p 1122:80  dockerashu/ciscohttpd:v1 
+cb7a67c218637051153196d72b4004864145b5564331a5dd7eaf3354f544944e
+[ashu@ip-172-31-29-98 samplewebapp]$ docker  ps
+CONTAINER ID   IMAGE                      COMMAND                  CREATED         STATUS         PORTS                                   NAMES
+cb7a67c21863   dockerashu/ciscohttpd:v1   "/bin/sh -c 'httpd -…"   5 seconds ago   Up 4 seconds   0.0.0.0:1122->80/tcp, :::1122->80/tcp   ashuweb
+
+```
+
+### testing and pushing image 
+
+```
+[ashu@ip-172-31-29-98 samplewebapp]$ docker  login -u dockerashu 
+Password: 
+WARNING! Your password will be stored unencrypted in /home/ashu/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[ashu@ip-172-31-29-98 samplewebapp]$ docker push dockerashu/ciscohttpd:v1
+The push refers to repository [docker.io/dockerashu/ciscohttpd]
+9d9db49777c3: Pushed 
+044a87cebc8f: Pushed 
+2653d992f4ef: Mounted from neoshub/ciscohttpd 
+v1: digest: sha256:d8a376dbffb48255ff35feb9f40eb1759f416da98a5597ed93e2c1697c02614c size: 950
+
+```
+
+### cgroups 
+
+```
+ashu@ip-172-31-29-98 samplewebapp]$ docker  run -itd --name ashuweb12 -p 1120:80  --memory 100m --cpu-shares=30  dockerashu/ciscohttpd:v1  
+97b02c257cc494fb747a8a5f123eaae582cdea8fa697aac8f5abe9aeec40d7c8
+
+```
+
 
 
 
