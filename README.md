@@ -166,8 +166,131 @@ lo        Link encap:Local Loopback
 
 <img src="portf.png">
 
+## Container Networking 
+
+<img src="cnmcni.png">
+
+### Docker networking  bridges
+
+<img src="br.png">
+
+### checking br 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  network  ls
+NETWORK ID     NAME      DRIVER    SCOPE
+14574d07ab7e   bridge    bridge    local
+831f87d85925   host      host      local
+ecb269f5e134   none      null      local
+
+```
+
+### 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  network   inspect  14574d07ab7e 
+[
+    {
+        "Name": "bridge",
+        "Id": "14574d07ab7ed83aadbe751d8f58f22f101dc05943a7b9d4fae39fd6816175fb",
+        "Created": "2021-08-31T03:56:11.753846674Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+                
+                
+```
+
+### probelm with default docker bridge 
+
+<img src="d0.png">
+
+### creating bridge 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  network  create  ashubr1
+2b7541c328e13bdfa2320fd4465674e8552bc21293db1a77eea4c25cc34d6bf8
+[ashu@ip-172-31-29-98 myimages]$ docker  network  ls
+NETWORK ID     NAME      DRIVER    SCOPE
+2b7541c328e1   ashubr1   bridge    local
+14574d07ab7e   bridge    bridge    local
+831f87d85925   host      host      local
+ecb269f5e134   none      null      local
+
+```
+
+### container in custom bridge 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  run -itd  --name ashuc22  --network  ashubr1  alpine ping localhost 
+b393f07df8096252c308e5df3b81b5b6006ad8a0bd7cf13bb3928aa3241ccd3b
+
+```
+### inspecting container json information 
+
+```
+199  docker  inspect  ashuc22  --format='{{.Id}}'
+  200  docker  inspect  ashuc22  --format='{{.State.Status}}'
+  201  docker  inspect  ashuc22  --format='{{.NetworkSettings.Networks.ashubr1.IPAddress}}' 
+  202  history 
+[ashu@ip-172-31-29-98 myimages]$ docker  inspect  ashuc22  --format='{{.NetworkSettings.Networks.ashubr1.IPAddress}}' 
+172.18.0.2
 
 
+```
+
+### container commm by name 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  exec  -it ashuc22  sh 
+/ # ping  ashu33
+PING ashu33 (172.18.0.3): 56 data bytes
+64 bytes from 172.18.0.3: seq=0 ttl=255 time=0.121 ms
+64 bytes from 172.18.0.3: seq=1 ttl=255 time=0.107 ms
+64 bytes from 172.18.0.3: seq=2 ttl=255 time=0.100 ms
+64 bytes from 172.18.0.3: seq=3 ttl=255 time=0.094 ms
+^C
+
+```
+
+### custom bridge with custom subnet 
+
+```
+ 216  docker  network  create ashubr2 --subnet  192.168.100.0/24 
+  217  docker  run -tid --name ashucc44  --network  ashubr2 alpine ping localhost 
+  218  docker  run -tid --name ashucc55 --ip  192.168.100.123   --network  ashubr2 alpine ping localhost 
+  
+```
+
+
+### remove all unused network 
+
+```
+[ashu@ip-172-31-29-98 myimages]$ docker  network prune 
+WARNING! This will remove all custom networks not used by at least one container.
+Are you sure you want to continue? [y/N] y
+Deleted Networks:
+jaya
+ashubr2
+ashubr1
+ruthangabr1
+shubham1
+debasish
+alwthomabr
+nishbr1
+krishna
+shbr1
+tejbr1
+
+```
 
 
 
