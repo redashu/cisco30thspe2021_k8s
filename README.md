@@ -395,4 +395,45 @@ a.txt  hii
 <img src="web.png">
 
 
+### intro to compose 
+
+<img src="compose.png">
+
+### more about compose 
+
+<img src="com.png">
+
+### Manual installation of compose 
+
+```
+ 3  sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /us
+r/local/bin/docker-compose
+    4  sudo chmod +x /usr/local/bin/docker-compose
+    5  sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    
+ ```
+ 
+ ### check compose version 
+ 
+ ```
+ [ashu@ip-172-31-29-98 myimages]$ docker-compose -v
+docker-compose version 1.29.2, build 5becea4c
+
+```
+### running first file 
+
+```
+ashu@ip-172-31-29-98 ashucompose1]$ ls
+docker-compose.yaml
+[ashu@ip-172-31-29-98 ashucompose1]$ docker-compose up -d
+Creating network "ashucompose1_ashubrx123" with the default driver
+Creating volume "ashucompose1_ashuvol111" with default driver
+Creating ashucc11 ... done
+[ashu@ip-172-31-29-98 ashucompose1]$ docker-compose ps
+  Name         Command       State   Ports
+------------------------------------------
+ashucc11   ping google.com   Up          
+
+```
+
 
