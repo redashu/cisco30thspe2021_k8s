@@ -209,6 +209,47 @@ Creating ashuc1 ... done
 
 ```
 
+###  figureout problem and solution 
+
+<img src="prob.png">
+
+### COntainer management prob 
+
+
+<img src="cont_man.png">
+
+### Intro to k8s 
+
+<img src="k8s.png">
+
+## Understanding k8s plan and arch 
+
+### arch L1 
+
+<img src="k8sarch1.png">
+
+### kube-apiserver in Master node 
+
+<img src="apis.png">
+
+### kube-schedular 
+
+<img src="kube-sch.png">
+
+### kube-controller -manager
+
+<img src="kubem.png">
+
+### ETCD in master node
+
+<img src="etcd.png">
+
+
+
+
+
+
+
 
 
 
