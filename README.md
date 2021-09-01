@@ -445,7 +445,124 @@ BUG_REPORT_URL="https://bugs.alpinelinux.org/"
 ```
 
 
+###  kubectl to connect or switch multiple cluster 
 
+<img src="k8scls.png">
+
+### to connect any k8s cluster we need auth file 
+
+```
+[root@masternode ~]# cd   /etc/kubernetes/
+[root@masternode kubernetes]# ls
+admin.conf 
+
+```
+
+### connecting k8s using auth file 
+
+```
+❯ kubectl   get  nodes   --kubeconfig=admin.conf
+NAME         STATUS   ROLES                  AGE     VERSION
+masternode   Ready    control-plane,master   10m     v1.22.1
+minion1      Ready    <none>                 9m43s   v1.22.1
+minion2      Ready    <none>                 9m49s   v1.22.1
+
+```
+
+### merging two k8s cluster auth file into single one 
+
+<img src="authmerge.png">
+
+### in any os under home directory copy auth file by the name of config 
+
+```
+❯ cp  -v  ~/Desktop/admin.conf  ./config
+/Users/fire/Desktop/admin.conf -> ./config
+❯ ls
+cache                  config                 http-cache             kubectl_autocompletion storage
+
+```
+
+### swithcing context 
+
+```
+❯ kubectl   config  get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+          kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   
+*         minikube                      minikube     minikube           default
+❯ kubectl  get   nodes
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   21d   v1.21.2
+❯ 
+❯ 
+❯ kubectl   config  use-context   kubernetes-admin@kubernetes
+Switched to context "kubernetes-admin@kubernetes".
+❯ kubectl   config  get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   
+          minikube                      minikube     minikube           default
+❯ kubectl  get   nodes
+NAME         STATUS   ROLES                  AGE   VERSION
+masternode   Ready    control-plane,master   19m   v1.22.1
+minion1      Ready    <none>                 19m   v1.22.1
+minion2      Ready    <none>                 19m   v1.22.1
+
+```
+
+### checking pod scheduling node 
+
+```
+❯ kubectl  get  po  -o wide
+NAME        READY   STATUS    RESTARTS   AGE   IP                NODE      NOMINATED NODE   READINESS GATES
+alwth-1     1/1     Running   0          30s   192.168.34.4      minion1   <none>           <none>
+ashupod-1   1/1     Running   0          66s   192.168.179.193   minion2   <none>           <none>
+debapod-1   1/1     Running   0          36s   192.168.179.195   minion2   <none>           <none>
+rubipod-1   1/1     Running   0          61s   192.168.179.194   minion2   <none>           <none>
+❯ kubectl  get  po  ashupod-1  -o wide
+NAME        READY   STATUS    RESTARTS   AGE   IP                NODE      NOMINATED NODE   READINESS GATES
+ashupod-1   1/1     Running   0          86s   192.168.179.193   minion2   <none>           <none>
+
+
+```
+
+### generate YAML here 
+
+```
+❯ kubectl  run   ashupod2  --image=alpine  --command ping localhost  --dry-run=client  -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod2
+  name: ashupod2
+spec:
+  containers:
+  - command:
+    - ping
+    - localhost
+    image: alpine
+    name: ashupod2
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+❯ kubectl  run   ashupod2  --image=alpine  --command ping localhost  --dry-run=client  -o yaml  >ashupod2.yaml
+
+
+```
+
+### more commands 
+
+```
+3449  kubectl  run   ashupod2  --image=alpine  --command ping localhost  --dry-run=client  -o yaml 
+ 3450  kubectl  run   ashupod2  --image=alpine  --command ping localhost  --dry-run=client  -o yaml  >ashupod2.yaml
+ 3451  kubectl  run   ashupod2  --image=alpine  --command ping localhost  --dry-run=client  -o json 
+ 3452  kubectl  run   ashupod2  --image=alpine  --command ping localhost  --dry-run=client  -o json  >pod2.json 
+ 
+ ```
+ 
+ 
 
 
 
