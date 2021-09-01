@@ -251,6 +251,198 @@ Creating ashuc1 ... done
 
 <img src="k8sdep.png">
 
+### Minikube all the way 
+
+<img src="minikube.png">
+
+### Minikube Installation 
+
+
+[page link]('https://minikube.sigs.k8s.io/docs/start/')
+
+## create cluster using minikube 
+
+```
+❯ minikube version
+minikube version: v1.22.0
+commit: a03fbcf166e6f74ef224d4a63be4277d017bb62e
+
+❯ minikube  start --driver=docker
+😄  minikube v1.22.0 on Darwin 11.4
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+🤷  docker "minikube" container is missing, will recreate.
+🔥  Creating docker container (CPUs=2, Memory=1988MB) ...
+🐳  Preparing Kubernetes v1.21.2 on Docker 20.10.7 ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+
+
+```
+
+###  checking minikube cluster status
+
+```
+❯ minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+===
+
+❯ minikube stop
+✋  Stopping node "minikube"  ...
+🛑  Powering off "minikube" via SSH ...
+
+
+===
+
+
+
+❯ minikube  ssh
+docker@minikube:~$ 
+docker@minikube:~$ 
+docker@minikube:~$ 
+docker@minikube:~$ exit
+logout
+
+
+
+```
+
+### checking k8s client software 
+
+```
+❯ kubectl   version  --client
+Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.1", GitCommit:"5e58841cce77d4bc13713ad2b91fa0d961e69192", GitTreeState:"clean", BuildDate:"2021-05-12T14:18:45Z", GoVersion:"go1.16.4", Compiler:"gc", Platform:"darwin/amd64"}
+
+```
+
+### checking nodes in k8s 
+
+```
+❯ kubectl  get  nodes
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   20d   v1.21.2
+
+```
+
+### deploy contianer in k8s 
+
+<img src="dep.png">
+
+### k8s deploy docker img in form of POds 
+
+
+<img src="pods.png">
+
+### Contianer vs POd 
+
+<img src="contvspod.png">
+
+### creating POD 
+
+<img src="pod.png">
+
+### pod cmd and entrypoint discussion 
+
+<img src="pod11.png">
+
+### checking syntx 
+
+```
+❯ ls
+pod1.yaml
+❯ kubectl  apply  -f  pod1.yaml  --dry-run=client
+pod/ashupod-1 created (dry run)
+
+```
+
+### creating pod 
+
+```
+❯ kubectl  apply  -f  pod1.yaml
+pod/ashupod-1 created
+❯ kubectl  get  pods
+NAME        READY   STATUS              RESTARTS   AGE
+ashupod-1   0/1     ContainerCreating   0          13s
+
+```
+
+### checking running pods logs
+
+```
+❯ kubectl  logs  -f  ashupod-1
+PING localhost (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: seq=0 ttl=64 time=0.082 ms
+64 bytes from 127.0.0.1: seq=1 ttl=64 time=0.114 ms
+64 bytes from 127.0.0.1: seq=2 ttl=64 time=0.337 ms
+64 bytes from 127.0.0.1: seq=3 ttl=64 time=0.094 ms
+
+```
+
+### checking details of POD 
+
+```
+❯ kubectl  describe  pod  ashupod-1
+Name:         ashupod-1
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Wed, 01 Sep 2021 15:15:34 +0530
+Labels:       <none>
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.3
+IPs:
+  IP:  172.17.0.3
+Containers:
+  ashuc1:
+    Container ID:  docker://6204235e6603f516574fb37e2d111d86f78f6ee390567f29b575b8a863b0138f
+    Image:         alpine
+    Image ID:      docker-pullable://alpine@sha256:e1c082e3d3c45cccac829840a25941e679c25d438cc8412c2fa221cf1a824e6a
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      ping localhost
+
+```
+
+
+### deleting pod 
+
+```
+❯ kubectl  delete  pod  ashupod-1
+pod "ashupod-1" deleted
+
+
+```
+
+### access container inside pod 
+
+```
+ kubectl  exec  -it  ashupod-1    -- sh
+/ # 
+/ # 
+/ # cat  /etc/os-release 
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.14.2
+PRETTY_NAME="Alpine Linux v3.14"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://bugs.alpinelinux.org/"
+/ # exit
+
+```
 
 
 
