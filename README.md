@@ -246,6 +246,11 @@ Creating ashuc1 ... done
 
 
 
+### k8s cluster deployment methods 
+
+
+<img src="k8sdep.png">
+
 
 
 
