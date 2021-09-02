@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudep1
+  name: ashudep1 # name of deployment 
+spec:
+  replicas: 1 # number of pod always 
+  selector:
+    matchLabels:
+      app: ashudep1
+  strategy: {}
+  template: # deploy will use template to create pod 
+    metadata:
+      creationTimestamp: null
+      labels: # label of pod 
+        app: ashudep1
+    spec:
+      containers:
+      - image: dockerashu/ciscohttpd:v1 # docker image 
+        name: ciscohttpd # name of container 
+        ports: # optional field these days but app port 
+        - containerPort: 80 
+        resources: {}
+status: {}
+
+# here service YAML 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudep1
+  name: ashusvc2 # name of service 
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector: # pod finder 
+    app: ashudep1 # label of POD 
+  type: NodePort # type of service 
+status:
+  loadBalancer: {}
