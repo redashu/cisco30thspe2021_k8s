@@ -173,5 +173,144 @@ ashusvc1                          NodePort    10.109.244.17    <none>        123
  
 ```
 
+### namespace concept 
+
+<img src="ns.png">
+
+### default namespaces in k8s
+
+```
+❯ kubectl  get  po
+No resources found in default namespace.
+❯ kubectl   get    namespaces
+NAME              STATUS   AGE
+default           Active   20h
+kube-node-lease   Active   20h
+kube-public       Active   20h
+kube-system       Active   20h
+
+```
+
+###  kube-system namespace data 
+
+```
+❯ kubectl  get  po  -n kube-system
+NAME                                       READY   STATUS    RESTARTS      AGE
+calico-kube-controllers-58497c65d5-ccql9   1/1     Running   1 (19h ago)   20h
+calico-node-dg25z                          1/1     Running   1 (19h ago)   20h
+calico-node-ht5vc                          1/1     Running   1 (19h ago)   20h
+calico-node-rkp5c                          1/1     Running   1 (19h ago)   20h
+coredns-78fcd69978-5bfzv                   1/1     Running   1 (19h ago)   20h
+coredns-78fcd69978-g9sct                   1/1     Running   1 (19h ago)   20h
+etcd-masternode                            1/1     Running   1 (19h ago)   20h
+kube-apiserver-masternode                  1/1     Running   1 (19h ago)   20h
+kube-controller-manager-masternode         1/1     Running   1 (19h ago)   20h
+kube-proxy-qs2wd                           1/1     Running   1 (19h ago)   20h
+kube-proxy-v6dfc                           1/1     Running   1 (19h ago)   20h
+kube-proxy-zr9jp                           1/1     Running   1 (19h ago)   20h
+kube-scheduler-masternode                  1/1     Running   1 (19h ago)   20h
+metrics-server-6fb5c69669-2xzc9            1/1     Running   0             4h33m
+
+```
+
+### creating namespace 
+
+```
+❯ kubectl  create  namespace  ashu-space
+namespace/ashu-space created
+❯ kubectl  get  ns
+NAME              STATUS   AGE
+ashu-space        Active   5s
+
+```
+
+### changing default namespace 
+
+```
+❯ kubectl  get  po
+No resources found in default namespace.
+❯ kubectl  config set-context --current --namespace=ashu-space
+Context "kubernetes-admin@kubernetes" modified.
+❯ kubectl  get  po
+No resources found in ashu-space namespace.
+
+```
+
+### deploy pod and svc 
+
+```
+❯ kubectl  apply  -f  ashweb.yaml -f  ashusvc1.yaml
+pod/ashwebpod created
+service/ashusvc1 created
+❯ kubectl  get  po,svc
+NAME            READY   STATUS    RESTARTS   AGE
+pod/ashwebpod   1/1     Running   0          8s
+
+NAME               TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/ashusvc1   NodePort   10.110.153.199   <none>        1234:31637/TCP   9s
+
+
+```
+
+### pod is not good approach we will be using deployment 
+
+<img src="nopod.png">
+
+### creating deployment yaml 
+
+```
+kubectl  create  deployment  ashudep1  --image=dockerashu/ciscohttpd:v1   --dry-run=client -o yaml 
+
+```
+
+### creating deployment yaml 
+
+```
+❯ kubectl  create  deployment  ashudep1  --image=dockerashu/ciscohttpd:v1   --dry-run=client -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudep1
+  name: ashudep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashudep1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashudep1
+    spec:
+      containers:
+      - image: dockerashu/ciscohttpd:v1
+        name: ciscohttpd
+        resources: {}
+status: {}
+❯ kubectl  create  deployment  ashudep1  --image=dockerashu/ciscohttpd:v1   --dry-run=client -o yaml   >deploy.yaml
+
+```
+
+### deployed pod 
+
+```
+❯ kubectl  apply -f  deploy.yaml
+deployment.apps/ashudep1 created
+❯ kubectl  get  deployment
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   1/1     1            1           6s
+❯ kubectl  get  deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   1/1     1            1           11s
+❯ kubectl  get  po
+NAME                        READY   STATUS    RESTARTS   AGE
+ashudep1-585b55dcf5-dxb9t   1/1     Running   0          16s
+
+```
+
 
 
