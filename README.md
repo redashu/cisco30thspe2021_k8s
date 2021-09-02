@@ -448,6 +448,23 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6Ilc4MEU3WlpHVG1BQ1phdDVXRk5hcE9CbUEwYVFK
  
 ```
 
+### Env in k8s 
 
+<img src="env.png">
+
+### COnfigmap to starore ENV values 
+
+```
+kubectl  create  configmap   ashucm1   --from-literal key1=app3   
+❯ kubectl  get  cm
+NAME               DATA   AGE
+ashucm1            1      2m6s
+kube-root-ca.crt   1      4h18m
+❯ kubectl  get  configmap
+NAME               DATA   AGE
+ashucm1            1      2m10s
+kube-root-ca.crt   1      4h18m
+
+```
 
 
