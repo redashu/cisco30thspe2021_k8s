@@ -312,5 +312,142 @@ ashudep1-585b55dcf5-dxb9t   1/1     Running   0          16s
 
 ```
 
+### creating service with expose method 
+
+```
+kubectl  expose deploy  ashudep1  --type NodePort  --port 80 --name  ashusvc2  --dry-run=client -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudep1
+  name: ashusvc2
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: ashudep1
+  type: NodePort
+status:
+  loadBalancer: {}
+  
+  
+```
+
+### merging yaml and deploy 
+
+```
+❯ kubectl apply -f deploy.yaml
+deployment.apps/ashudep1 configured
+service/ashusvc2 created
+
+```
+
+## scaling manually 
+
+```
+❯ kubectl  scale deployment  ashudep1  --replicas=3
+deployment.apps/ashudep1 scaled
+❯ kubectl  get  deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1   3/3     3            3           107m
+❯ kubectl  get po --show-labels
+NAME                        READY   STATUS    RESTARTS   AGE    LABELS
+ashudep1-585b55dcf5-7x9zs   1/1     Running   0          100m   app=ashudep1,pod-template-hash=585b55dcf5
+ashudep1-585b55dcf5-rdkz4   1/1     Running   0          22s    app=ashudep1,pod-template-hash=585b55dcf5
+ashudep1-585b55dcf5-wwm46   1/1     Running   0          22s    app=ashudep1,pod-template-hash=585b55dcf5
+
+```
+
+### dashboard deployment 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+Warning: spec.template.metadata.annotations[seccomp.security.alpha.kubernetes.io/pod]: deprecated since v1.19; use the "seccompProfile" field instead
+deployment.apps/dashboard-metrics-scraper created
+
+```
+
+### lets access it 
+
+```
+❯ kubectl  get   deploy  -n  kubernetes-dashboard
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+dashboard-metrics-scraper   1/1     1            1           52s
+kubernetes-dashboard        1/1     1            1           54s
+❯ kubectl  get   pod    -n  kubernetes-dashboard
+NAME                                         READY   STATUS    RESTARTS   AGE
+dashboard-metrics-scraper-856586f554-7ffj5   1/1     Running   0          76s
+kubernetes-dashboard-67484c44f6-ls2nq        1/1     Running   0          78s
+❯ kubectl  get   svc    -n  kubernetes-dashboard
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+dashboard-metrics-scraper   ClusterIP   10.102.36.252    <none>        8000/TCP   96s
+kubernetes-dashboard        ClusterIP   10.108.227.111   <none>        443/TCP    104s
+❯ kubectl  edit   svc   kubernetes-dashboard    -n  kubernetes-dashboard
+service/kubernetes-dashboard edited
+❯ kubectl  get   svc    -n  kubernetes-dashboard
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)         AGE
+dashboard-metrics-scraper   ClusterIP   10.102.36.252    <none>        8000/TCP        2m39s
+kubernetes-dashboard        NodePort    10.108.227.111   <none>        443:32719/TCP   2m47s
+
+```
+
+### namespace sa info 
+
+```
+❯ kubectl  get  serviceaccount
+NAME      SECRETS   AGE
+default   1         143m
+❯ kubectl  get  sa
+NAME      SECRETS   AGE
+default   1         144m
+❯ kubectl  get  secret
+NAME                  TYPE                                  DATA   AGE
+default-token-hhpt5   kubernetes.io/service-account-token   3      144m
+❯ kubectl  describe   secret  default-token-hhpt5
+Name:         default-token-hhpt5
+Namespace:    ashu-space
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: default
+              kubernetes.io/service-account.uid: cdcd9c81-6c22-4af7-ae36-caeaab0c3c3d
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1099 bytes
+namespace:  10 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6Ilc4MEU3WlpHVG1BQ1phdDVXRk5hcE9CbUEwYVFKbHZJZVZXZmtPZVU5ekEifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJhc2h1LXNwYWNlIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF
+
+
+```
+### getting secret of service account 
+
+```
+599  kubectl  get   sa   -n  kubernetes-dashboard
+ 3600  kubectl  get   secret  -n  kubernetes-dashboard
+ 3601  kubectl  describe  secret  kubernetes-dashboard-token-vgsmw   -n  kubernetes-dashboard
+ 3602  kubectl  get   svc    -n  kubernetes-dashboard
+ 3603  kubectl  describe  secret  kubernetes-dashboard-token-vgsmw   -n  kubernetes-dashboard
+ 
+```
+
+
 
 
