@@ -1,0 +1,10 @@
+apiVersion: v1 # k8s api version 
+kind: Pod # to request pod operation 
+metadata: # info about Pod
+ name: ashupod-1  #  name of the POd 
+spec:
+ nodeName: minion1 # static scheduling 
+ containers:
+ - image: alpine # image from docker hub 
+   name: ashuc1 # name of container 
+   command: ["sh","-c","ping localhost"] # default process of container 
