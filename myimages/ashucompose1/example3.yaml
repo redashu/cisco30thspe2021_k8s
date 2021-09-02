@@ -1,0 +1,15 @@
+version: '3.8' # compose file version 
+networks: # to create bridge 
+ ashubrx111: # name of bridge 
+services:
+ ashuapp1:
+  image: cisocweb:ashuv111 # this image tag i want to build 
+  build:  #  this will do build  . means location of dockerfile 
+   context: . # location of dockerfile 
+   dockerfile: nginx.dockerfile  # name of dockerfile 
+  container_name: ashuc1
+  ports: # port forwarding option 
+    - "2233:80" # like docker run -p 2233:80 
+  networks: # using network 
+   - ashubrx111 # network name 
+  

@@ -1,0 +1,6 @@
+version: '3.8' # compose file version 
+services:
+ ashuapp1:
+  image: alpine
+  container_name: ashuc1
+  command: ping localhost 

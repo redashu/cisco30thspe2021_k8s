@@ -1,0 +1,9 @@
+version: '3.8' # compose file version 
+services:
+ ashuapp2:
+  image: centos
+  command: ping fb.com 
+ ashuapp1:
+  image: alpine
+  container_name: ashuc1
+  command: ping localhost 
