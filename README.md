@@ -2,4 +2,12 @@
 
 <img src="plan.png">
 
-## git hub check
+## container app rev 
+
+<img src="rev.png">
+
+## understanding kubeconfig file 
+
+<img src="kubeconfig.png">
+
+
