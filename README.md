@@ -276,3 +276,16 @@ default-token-hhpt5   kubernetes.io/service-account-token   3      23h
 
 ```
 
+### helm intro 
+
+<img src="helm.png">
+
+### always go with helm v3 
+
+<img src="helmv3.png">
+
+### helm client side installation 
+
+[helm](https://helm.sh/docs/intro/install/)
+
+
