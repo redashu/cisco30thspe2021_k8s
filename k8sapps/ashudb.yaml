@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudb
+  name: ashudb # name of deployment 
+spec:
+  replicas: 1 # db pod numbers 
+  selector:
+    matchLabels:
+      app: ashudb
+  strategy: {}
+  template: # for pod creation 
+    metadata:
+      creationTimestamp: null
+      labels: # label of POD 
+        app: ashudb
+    spec:
+      containers:
+      - image: mysql # image from docker hub 
+        name: mysql # name of container 
+        env: 
+        - name: MYSQL_ROOT_PASSWORD # default mysql docker img env var to set password
+          valueFrom:
+           secretKeyRef:
+            name: ashudbsec
+            key: key1 
+        resources: {}
+status: {}

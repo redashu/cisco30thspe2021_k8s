@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webui
+  name: webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webui
+  strategy: {}
+  template: # template section 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webui
+    spec:
+      nodeName: minion2  # static scheduling 
+      volumes: # creating volume 
+      - name: ashuvol22
+        hostPath: # specific path to host 
+         path: /var/run/docker.sock # path 
+         type: Socket 
+      containers:
+      - image: portainer/portainer
+        name: portainer
+        volumeMounts: # mounting the same volume 
+        - name: ashuvol22
+          mountPath: /var/run/docker.sock  # portainer read from docker socket
+        resources: {}
+status: {}
