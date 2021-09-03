@@ -352,6 +352,75 @@ ashudb   ClusterIP   10.105.159.201   <none>        3306/TCP   5s
 
 ```
 
+### k8s volumes 
+
+<img src="vol.png">
+
+### Example of emptyDir vol 
+
+```
+❯ kubectl  get  po
+NAME     READY   STATUS    RESTARTS   AGE
+emppod   1/1     Running   0          25s
+❯ kubectl  get  po  -o wide
+NAME     READY   STATUS    RESTARTS   AGE   IP                NODE      NOMINATED NODE   READINESS GATES
+emppod   1/1     Running   0          29s   192.168.179.217   minion2   <none>           <none>
+❯ kubectl  exec -it emppod  -- sh
+/ # cd /mnt/cisco/
+/mnt/cisco # ls
+time.txt
+/mnt/cisco # cat  time.txt 
+Fri Sep  3 10:11:57 UTC 2021
+Fri Sep  3 10:12:02 UTC 2021
+```
+
+### helper / sidecar container 
+
+<img src="sidecar.png">
+
+###
+
+```
+❯ kubectl replace -f  empvol.yaml  --force
+pod "emppod" deleted
+pod/emppod replaced
+❯ kubectl  get  po
+NAME     READY   STATUS    RESTARTS   AGE
+emppod   2/2     Running   0          8s
+❯ kubectl  expose pod  emppod  --type NodePort --port 80 --name ss11
+service/ss11 exposed
+❯ kubectl  get  svc
+NAME   TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+ss11   NodePort   10.107.200.111   <none>        80:31740/TCP   5s
+
+```
+
+### hostPath 
+
+<img src="hostp.png">
+
+## Deploy portainer webui using HostPath vol
+
+```
+kubectl  create  deployment  webui  --image=portainer/portainer  --dry-run=client -o yaml >portainer.yaml
+
+```
+
+===
+
+```
+❯ kubectl apply -f  portainer.yaml
+deployment.apps/webui created
+❯ kubectl  get  deploy
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+webui   1/1     1            1           9s
+❯ kubectl  get  po
+NAME                     READY   STATUS    RESTARTS   AGE
+webui-784948c976-8mf22   1/1     Running   0          13s
+❯ kubectl expose deploy webui  --type NodePort --port 9000 --name ss112
+service/ss112 exposed
+
+```
 
 
 
