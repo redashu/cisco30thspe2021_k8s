@@ -289,3 +289,70 @@ default-token-hhpt5   kubernetes.io/service-account-token   3      23h
 [helm](https://helm.sh/docs/intro/install/)
 
 
+### ingress controller 
+
+<img src="ingress.png">
+
+### Ingress controller 
+
+<img src="ig.png">
+
+### storage in k8s 
+
+
+<img src="st.png">
+
+### mysql Db deployment. 
+
+```
+kubectl  create  deployment   ashudb --image=mysql  --dry-run=client -o yaml   >ashudb.yaml
+
+```
+
+### create secret 
+
+````
+❯ kubectl  create  secret  generic  ashudbsec  --from-literal  key1=Ciscodb088
+secret/ashudbsec created
+❯ kubectl  get  secret
+NAME                  TYPE                                  DATA   AGE
+ashudbsec             Opaque                                1      11s
+ashuimgsec            kubernetes.io/dockerconfigjson        1      137m
+default-token-hhpt5   kubernetes.io/service-account-token   3      26h
+
+```
+
+### service create 
+
+
+```
+❯ kubectl  expose deploy  ashudb  --type ClusterIP  --port 3306 --dry-run=client  -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudb
+  name: ashudb
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: ashudb
+  type: ClusterIP
+status:
+  loadBalancer: {}
+❯ kubectl  expose deploy  ashudb  --type ClusterIP  --port 3306
+service/ashudb exposed
+❯ kubectl  get  svc
+NAME     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+ashudb   ClusterIP   10.105.159.201   <none>        3306/TCP   5s
+
+```
+
+
+
+
+
