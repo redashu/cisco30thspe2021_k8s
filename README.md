@@ -187,3 +187,92 @@ ashuwebapp-8d667dcc9-fxm2m   1/1     Running   0          25s
 
 <img src="hpacon.png">
 
+### HPA 
+
+#### setting limits in Resources 
+
+<img src="limit.png">
+
+#### we need metric server 
+
+<img src="metric.png">
+
+### Deploying metric server 
+
+[metric server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
+
+### creating auto scaling rules 
+
+```
+❯ kubectl  get deploy
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+ashuwebapp   1/1     1            1           95m
+❯ kubectl  autoscale  deploy ashuwebapp  --min=1  --max=10   --cpu-percent=80
+horizontalpodautoscaler.autoscaling/ashuwebapp autoscaled
+❯ kubectl  get  hpa
+NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+ashuwebapp   Deployment/ashuwebapp   0%/80%    1         10        1          17s
+❯ kubectl  get  hpa
+NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+ashuwebapp   Deployment/ashuwebapp   0%/80%    1         10        1          27s
+
+```
+
+### app deploy in k8s from private registry 
+
+```
+❯ kubectl  run   privatepod  --image=phx.ocir.io/axmbtg8judkl/cisco:v1  --command ping fb.com --dry-run=client -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: privatepod
+  name: privatepod
+spec:
+  containers:
+  - command:
+    - ping
+    - fb.com
+    image: phx.ocir.io/axmbtg8judkl/cisco:v1
+    name: privatepod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+❯ kubectl  run   privatepod  --image=phx.ocir.io/axmbtg8judkl/cisco:v1  --command ping fb.com --dry-run=client -o yaml   >pri.yml
+
+```
+
+### Deploy img 
+
+```
+❯ kubectl  apply -f  pri.yml
+pod/privatepod created
+❯ kubectl  get  po
+NAME         READY   STATUS         RESTARTS   AGE
+privatepod   0/1     ErrImagePull   0          8s
+
+```
+
+### secret will be used to store password or OCR 
+
+<img src="sec.png">
+
+### creating secret to OCR info 
+
+```
+kubectl  create  secret  docker-registry  ashuimgsec  --docker-server=phx.ocir.io  --docker-username axmg8judkl/learme@gmail.com  --docker-password="PQzp)biBr+"
+
+```
+
+### 
+
+```
+❯ kubectl  get secret
+NAME                  TYPE                                  DATA   AGE
+ashuimgsec            kubernetes.io/dockerconfigjson        1      8s
+default-token-hhpt5   kubernetes.io/service-account-token   3      23h
+
+```
+
