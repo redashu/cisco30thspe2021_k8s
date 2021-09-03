@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuwebapp
+  name: ashuwebapp # name of deployment 
+spec:
+  replicas: 1 # number of POD 
+  selector:
+    matchLabels:
+      app: ashuwebapp
+  strategy: {}
+  template: # template will be used by deploy to create POD 
+    metadata:
+      creationTimestamp: null
+      labels: # label of pOD --- used by service to find POD 
+        app: ashuwebapp
+    spec:
+      containers:
+      - image: dockerashu/ciscowebapp:v0011 # docker image
+        name: ciscowebapp # name of container 
+        ports: # optional field 
+          - containerPort: 80 
+        resources: # vertical scaling limiting
+         requests: # during creatiion time of POD default request 
+          cpu: 200m 
+         limits: # max a pod container can use 
+          cpu: 500m 
+status: {}
+
+# creating Service of Nodeport type 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashusvc11
+  name: ashusvc11
+spec:
+  ports:
+  - name: 1234-80
+    port: 1234 # service IP will be bounded with this port 
+    protocol: TCP
+    targetPort: 80 # targt app port 
+  selector: # pod finder 
+     app: ashuwebapp # exactly same as label of POD 
+  type: NodePort
+status:
+  loadBalancer: {}

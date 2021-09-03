@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels: # to give label 
+    x: helloashu #  label of my pod 
+  name: ashwebpod # name of pod 
+spec: # app specification 
+  containers:
+  - image: dockerashu/ciscohttpd:v1 # image from docker hub 
+    name: ashwebpod # name of container 
+    ports: # application port number 
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

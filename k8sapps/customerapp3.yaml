@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuwebapps
+  name: ashuwebapps # name of deployment 
+  
+spec:
+  replicas: 1 # number of pod 
+  selector:
+    matchLabels:
+      app: ashuwebapps
+  strategy: {}
+  template: # deploy will use template to create pod 
+    metadata:
+      creationTimestamp: null
+      labels: # label of pod 
+        app: ashuwebapps
+    spec:
+      containers:
+      - image: dockerashu/customer1:v1 # docker image 
+        name: customer1 # name of container 
+        env: # create or update env variables 
+        - name: myapp # name of env variable 
+          valueFrom: # calling value from somewhere 
+           configMapKeyRef: # configMAP 
+            name: ashucm2 # name of cm 
+            key: key2 # key 
+        resources: {}
+status: {}
+
+# creating svc of Nodeport type 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashusvc3
+  name: ashusvc3 # name of service
+  
+spec:
+  ports:
+  - name: 1234-80
+    port: 1234 # port of service IP 
+    protocol: TCP
+    targetPort: 80
+  selector: # POD finder  
+    app: ashuwebapps # exactly same as pod label 
+  type: NodePort
+status:
+  loadBalancer: {}

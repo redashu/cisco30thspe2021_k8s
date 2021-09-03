@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod2
+  name: ashupod2
+spec:
+  containers:
+  - command:
+    - ping
+    - localhost
+    image: alpine
+    name: ashupod2
+    resources:  # no limit by default 
+     requests:
+      cpu: 200m # 1 Vcpu -- 1000 Milicore 
+     limits:
+      cpu: 500m #  max vertical limit 
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
